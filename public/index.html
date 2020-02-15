@@ -1,0 +1,41 @@
+<html>
+  <head>
+    <script>
+      async function send(event) {
+	event.preventDefault()
+	try {
+	  const response = await fetch('/execute', {
+	    method: 'post',
+	    body: JSON.stringify({
+	      line: line.value,
+	      text: text.value,
+	    }),
+	    headers: {
+	      'Content-Type': "application/json",
+	    }
+	  })
+	  const value = await response.text();
+	  console.log("Received response:", value)
+	  result.innerText = value
+	} catch (e) {
+	  console.error(e)
+	  result.innerText = e.toString()
+	}
+      }
+    </script>
+    <style>
+      form {
+	display: flex;
+	flex-direction: column;
+      }
+    </style>
+  </head>
+  <body>
+    <form onsubmit="send(event)">
+      <input name=line id=line>
+      <textarea name=text id=text></textarea>
+      <button>Execute!</button>
+      <pre id=result></pre>
+    </form>
+  </body>
+</html>
